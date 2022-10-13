@@ -33,3 +33,5 @@ database.sql
 
 # Packages
 node_modules
+
+_client
