@@ -32,5 +32,8 @@ db.js
 # DB creation files
 database.sql
 
+# Logs
+logs
+
 # Packages
 node_modules
