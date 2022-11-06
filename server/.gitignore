@@ -30,7 +30,7 @@ db.js
 .env
 
 # DB creation files
-# database.sql
+database.sql
 
 # Packages
 node_modules
