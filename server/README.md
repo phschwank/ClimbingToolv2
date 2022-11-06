@@ -9,6 +9,4 @@
 ## Launch the Server in Development Mode: `nodemon index`
 
 1. Use the command line terminal and navigate to the server directory.
-2. Run `nodemon index` to run the server in development mode on port 5000.
-
-The server will reload if you make edits.\
+2. Run `npm run start` or `npm run dev` (nodemon: the server will reload if you make edits) to run the server in development mode on port 5000.
