@@ -1,4 +1,3 @@
-const User = require('../model/User');
 const connectDB = require('../config/dbConn');
 
 const getAllUsers = async (req, res) => {
