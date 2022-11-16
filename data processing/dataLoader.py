@@ -39,7 +39,7 @@ def closeDatabase(connection, cursor):
 
 
 def dropTables(connection, cursor):
-    table_names = ["users"]
+    table_names = ["users", "users_info"]
     for table in table_names:
         try:
             cursor.execute(sql.SQL(""" DROP TABLE IF EXISTS {table} CASCADE """).format(table=sql.Identifier(table)))
@@ -53,15 +53,21 @@ def dropTables(connection, cursor):
 
 
 def createTables(connection, cursor):
-    users_query = """ CREATE TABLE IF NOT EXISTS users (
-        user_id SERIAL PRIMARY KEY,
-        username VARCHAR(255) NOT NULL,
+    credentials_query = """ CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(20) UNIQUE NOT NULL,
+        roles VARCHAR(20) DEFAULT '2001',
         password VARCHAR(255) NOT NULL,
+        refresh_token VARCHAR(255)
+    )"""
+    users_query = """ CREATE TABLE IF NOT EXISTS users_info (
+        username VARCHAR(255) PRIMARY KEY,
         weight NUMERIC DEFAULT NULL,
-        height SMALLINT DEFAULT NULL
+        height SMALLINT DEFAULT NULL,
+        FOREIGN KEY (username) REFERENCES users (username)
     )"""
 
-    query_list = [users_query]
+    query_list = [credentials_query, users_query]
 
     for query in query_list:
         try:
@@ -82,7 +88,8 @@ def createTables(connection, cursor):
 def loadDataToDB(connection, cursor):
     # define dictionary for CSV file - table name translation
     table_dict = {
-        "Users.csv":"users",
+        "users.csv":"users",
+        "users_info.csv":"users_info"
     }
 
     for key, value in table_dict.items():
@@ -91,7 +98,8 @@ def loadDataToDB(connection, cursor):
             next(f) # skip header row
             try:
                 # read data and treat each 'None' value as postgres Null
-                cursor.copy_from(f, value, sep=';', columns=('username','password','weight','height'), null='None')
+                # cursor.copy_from(f, value, sep=';', columns=('username','password','weight','height'), null='None')
+                cursor.copy_from(f, value, sep=';', null='None')
                 connection.commit()
                 print("Data from file {} is successfully loaded to table {}".format(key, value))
             except(Exception, psycopg2.DatabaseError) as error:
