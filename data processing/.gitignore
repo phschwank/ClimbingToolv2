@@ -2,7 +2,6 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-__pycache__
 
 # Thumbnails
 ._*
@@ -28,7 +27,6 @@ db.js
 
 # DB creation files
 .env
-database.ini
 
 # Packages
 node_modules

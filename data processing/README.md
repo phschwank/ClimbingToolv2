@@ -1,7 +1,7 @@
-1. Activate the virtual environment with ```pipenv shell``` (pipenv may need to be installed in advance.). 
+# Data Loader
 
-2. Install all dependencies for the Backend with ```pipenv sync --dev```. With the command ```pipenv install --dev``` step 1 can be skipped.
+## Install and Run the Data Loader
 
-## Node Version
-
-1. run ```node dataLoader.js``` in the terminal
+1. Create `.env` file with your credentials (see `.env.sample`).
+2. Run `npm install` in the terminal to install the necessary packages.
+3. Run `node dataLoader.js` in the terminal.

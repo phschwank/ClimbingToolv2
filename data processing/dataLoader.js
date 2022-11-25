@@ -1,8 +1,7 @@
 
-const connectDB = require('../server/config/dbConn');
+const connectDB = require('./dbConn');
 const fs = require("fs");
 const fastcsv = require("fast-csv");
-var async = require('async');
 
 const dropDBTable = async (tableName, res) => {
     try {
@@ -53,7 +52,7 @@ const insertDataToDB = async (data, tableName, res) => {
                 var query = `INSERT INTO users (id, username, roles, password, refresh_token) VALUES ($1, $2, $3, $4, $5)`
                 break
             case 'users_info':
-                var query = `INSERT INTO users_list (username, weight, height) VALUES ($1, $2, $3)`
+                var query = `INSERT INTO users_info (username, weight, height) VALUES ($1, $2, $3)`
                 break
             default:
                 console.log('No correct Database found');
@@ -88,11 +87,18 @@ const runWorkflow = async (tableName) => {
     stream.pipe(csvStream);
 };
 
+async function doWork() {
+    const tableNames = ["users", "users_info"];
+    try {
+        for (element of tableNames) {
+            await dropDBTable(element);
+            await createDBTable(element);
+            await runWorkflow(element);
+        };
+    }
+    catch (error) {
+        console.log(error.message);
+    }
+}
 
-const tableNames = ["users"]//,"users_info"]
-// first drop all existing tables
-async.eachSeries(tableNames, dropDBTable);
-// create new Table
-async.eachSeries(tableNames, createDBTable);
-// read data and insert it into the database
-//async.eachSeries(tableNames, runWorkflow);
+doWork();
