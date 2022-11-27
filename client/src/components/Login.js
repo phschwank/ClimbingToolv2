@@ -6,7 +6,7 @@ import axios from '../api/axios';
 const LOGIN_URL = '/auth';
 
 const Login = () => {
-    const { setAuth } = useAuth();
+    const { setAuth, persist, setPersist } = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -39,7 +39,6 @@ const Login = () => {
                 }
             );
             console.log(JSON.stringify(response?.data));
-            //console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
             setAuth({ user, pwd, roles, accessToken });
@@ -59,6 +58,14 @@ const Login = () => {
             errRef.current.focus();
         }
     }
+
+    const togglePersist = () => {
+        setPersist(prev => !prev);
+    }
+
+    useEffect(() => {
+        localStorage.setItem("persist", persist);
+    }, [persist])
 
     return (
 
@@ -86,6 +93,15 @@ const Login = () => {
                     required
                 />
                 <button>Sign In</button>
+                <div className="persistCheck">
+                    <input
+                        type="checkbox"
+                        id="persist"
+                        onChange={togglePersist}
+                        checked={persist}
+                    />
+                    <label htmlFor="persist">Trust This Device</label>
+                </div>
             </form>
             <p>
                 Need an Account?<br />

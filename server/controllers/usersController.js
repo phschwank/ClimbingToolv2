@@ -3,7 +3,7 @@ const connectDB = require('../config/dbConn');
 const getAllUsers = async (req, res) => {
     const pool = await connectDB();
     try {
-        const users = await pool.query("SELECT * FROM users");
+        const users = await pool.query("SELECT username FROM users");
         if (users.rows.length === 0) {
             return res.status(204).json({ 'message': 'No users found' }); // no content
         }
@@ -38,7 +38,7 @@ const getUser = async (req, res) => {
 
     const pool  = await connectDB();
     try {
-        const user = await pool.query("SELECT * FROM users WHERE id = $1", [req.params.id]);
+        const user = await pool.query("SELECT username FROM users WHERE id = $1", [req.params.id]);
         if (user.rows.length === 0) {
             return res.status(204).json({ 'message': `User ID ${req.params.id} not found` });
         }

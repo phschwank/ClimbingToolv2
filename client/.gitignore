@@ -48,6 +48,7 @@ database.sql
 .env.development.local
 .env.test.local
 .env.production.local
+_*
 
 npm-debug.log*
 yarn-debug.log*
