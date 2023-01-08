@@ -49,7 +49,7 @@ const insertDataToDB = async (data, tableName, res) => {
         const pool = await connectDB();
         switch (tableName) {
             case 'users':
-                var query = `INSERT INTO users (id, username, roles, password, refresh_token) VALUES ($1, $2, $3, $4, $5)`
+                var query = `INSERT INTO users (username, roles, password, refresh_token) VALUES ($1, $2, $3, $4)`
                 break
             case 'users_info':
                 var query = `INSERT INTO users_info (username, weight, height) VALUES ($1, $2, $3)`
