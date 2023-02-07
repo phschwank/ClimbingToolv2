@@ -4,6 +4,7 @@ import Home from './components/Home';
 import Layout from './components/Layout';
 import Editor from './components/Editor';
 import Admin from './components/Admin';
+import Welcome from './components/WelcomeScreen/WelcomeScreen';
 import Missing from './components/Missing';
 import Unauthorized from './components/Unauthorized';
 import Lounge from './components/Lounge';
@@ -45,6 +46,10 @@ function App() {
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
             <Route path="lounge" element={<Lounge />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route path="willkommen" element={<Welcome />} />
           </Route>
         </Route>
 
