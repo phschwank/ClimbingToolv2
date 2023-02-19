@@ -1,18 +1,38 @@
 import * as React from 'react';
-import Header from './Header';
+import Header from '../GeneralComponents/Header';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import ProfilePicture from './ProfilePicture/ProfilePicture';
+import KeyNumbers from './KeyNumbers';
+import Chat from './Chat';
+import LastEntries from './LastEntries';
 
 const Welcome = () => {
+
+    // Es muss noch ein Offset für den Header eingebaut werden, damit der Scroll-Balken früher erscheint
+
     return (
         <div>
             <Header 
                 routes={{ route1: 'Chat', route2: 'Routen'}} 
                 title={'Startseite'}
             />
-            <section>
-            <h1>Startseite</h1>
-            <br />
-            <p>Willkommen auf der Startseite</p>
-            </section>
+            <Box sx={{ flexGrow: 1, mt: '3rem' }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                        <ProfilePicture />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <KeyNumbers />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Chat />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <LastEntries />
+                    </Grid>
+                </Grid>
+            </Box>
         </div>
     )
 }
