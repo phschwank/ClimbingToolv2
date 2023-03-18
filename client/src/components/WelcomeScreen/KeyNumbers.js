@@ -1,38 +1,13 @@
 import Box from '@mui/material/Box';
 import React from "react";
-import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { StyledTableRow, StyledTableCell } from '../GeneralComponents/TableSettings/TableStyle';
 
 
 export default function ProfilePicture(props) {
-
-  // ergänzen, dass Daten dynamisch aus Datenbank geholt werden
-  // ergänzen, dass die beiden Tabellen eine Basis-Komponente besitzen und alle Parameter dynamisch mitgegeben werden können
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-  
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
   
   function createData(name, value) {
     return { name, value };

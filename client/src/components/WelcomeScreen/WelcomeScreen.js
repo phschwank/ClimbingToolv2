@@ -14,7 +14,7 @@ const Welcome = () => {
     return (
         <div>
             <Header 
-                routes={{ route1: 'Chat', route2: 'Routen'}} 
+                routes={{ route1: { link: '/Chat', name: 'Chat'}, route2: {link: '/willkommen/route', name: 'Route erfassen'}}} 
                 title={'Startseite'}
             />
             <Box sx={{ flexGrow: 1, mt: '3rem' }}>

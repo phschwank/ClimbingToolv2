@@ -8,11 +8,15 @@ import Menu from '@mui/material/Menu';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import React from "react";
+import { useNavigate} from "react-router-dom";
+import useLogout from "../../hooks/useLogout";
 
 export default function Header(props) {
 
   const [anchorElProfile, setAnchorElProfile] = React.useState(null);
   const [anchorElApp, setAnchorElApp] = React.useState(null);
+  const navigate = useNavigate();
+  const logout = useLogout();
 
   function handleAppMenu(event) {
     setAnchorElApp(event.currentTarget);
@@ -22,14 +26,21 @@ export default function Header(props) {
     setAnchorElProfile(event.currentTarget);
   };
   
-  function handleClose() {
+  const handleClose = (link) => {
+    //<Link to= {link} >Gehe zur Startseite</Link>
     setAnchorElProfile(null);
     setAnchorElApp(null);
+    navigate(link);
   }; 
+
+  const signOut = async () => {
+    await logout();
+    navigate('/linkpage');
+}
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar>
+      <AppBar color="primary">
         <Toolbar>
           <IconButton
             size="large"
@@ -58,8 +69,8 @@ export default function Header(props) {
                 open={Boolean(anchorElApp)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>{props.routes.route1}</MenuItem>
-                <MenuItem onClick={handleClose}>{props.routes.route2}</MenuItem>
+                <MenuItem onClick={() => handleClose(props.routes.route1.link)}>{props.routes.route1.name}</MenuItem>
+                <MenuItem onClick={() => handleClose(props.routes.route2.link)}>{props.routes.route2.name}</MenuItem>
               </Menu>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             {props.title}
@@ -89,8 +100,8 @@ export default function Header(props) {
                 open={Boolean(anchorElProfile)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={handleClose}>Profil</MenuItem>
+                <MenuItem onClick={signOut}>Abmelden</MenuItem>
               </Menu>
         </Toolbar>
       </AppBar>

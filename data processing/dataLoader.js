@@ -23,15 +23,40 @@ const createDBTable = async (tableName,res) => {
                     username VARCHAR(20) UNIQUE NOT NULL,
                     roles VARCHAR(20) DEFAULT '2001',
                     password VARCHAR(255) NOT NULL,
-                    refresh_token VARCHAR(255))
+                    refresh_token VARCHAR(255),
+                    content JSONB)
                     `);
                 break
-            case 'users_info':
-                await pool.query(`CREATE TABLE IF NOT EXISTS users_info (
-                    username VARCHAR(255) PRIMARY KEY,
-                    weight NUMERIC DEFAULT NULL,
-                    height SMALLINT DEFAULT NULL,
-                    FOREIGN KEY (username) REFERENCES users (username))
+            case 'spots':
+                await pool.query(`CREATE TABLE IF NOT EXISTS spots (
+                    spotname VARCHAR(255) PRIMARY KEY,
+                    canton VARCHAR(50) DEFAULT NULL,
+                    country VARCHAR(50) DEFAULT NULL,
+                    latitude NUMERIC DEFAULT NULL,
+                    longitude NUMERIC DEFAULT NULL, 
+                    content JSONB)
+                `);
+                break 
+            case 'routes':
+                await pool.query(`CREATE TABLE IF NOT EXISTS routes (
+                    routename VARCHAR(255),
+                    spotname VARCHAR(255),
+                    grade VARCHAR(3) NOT NULL,
+                    content JSONB,
+                    PRIMARY KEY (routename, spotname),
+                    FOREIGN KEY (spotname) REFERENCES spots (spotname) ON DELETE CASCADE)
+                `);
+                break 
+            // zusammengesetzter Foreign Key nötig damit UNIQUE Constraint erfüllt ist
+            case 'user_routes':
+                await pool.query(`CREATE TABLE IF NOT EXISTS user_routes (
+                    username VARCHAR(255),
+                    routename VARCHAR(255),
+                    spotname VARCHAR(255),
+                    content JSONB,
+                    PRIMARY KEY(username, routename),
+                    FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE,
+                    FOREIGN KEY (routename, spotname) REFERENCES routes (routename, spotname) ON DELETE CASCADE)
                 `);
                 break
             default:
@@ -49,10 +74,16 @@ const insertDataToDB = async (data, tableName, res) => {
         const pool = await connectDB();
         switch (tableName) {
             case 'users':
-                var query = `INSERT INTO users (username, roles, password, refresh_token) VALUES ($1, $2, $3, $4)`
+                var query = `INSERT INTO users (username, roles, password, refresh_token, content) VALUES ($1, $2, $3, $4, $5)`
                 break
-            case 'users_info':
-                var query = `INSERT INTO users_info (username, weight, height) VALUES ($1, $2, $3)`
+            case 'spots':
+                var query = `INSERT INTO spots (spotname, canton, country, latitude, longitude, content) VALUES ($1, $2, $3, $4, $5, $6)`
+                break
+            case 'routes':
+                var query = `INSERT INTO routes (routename, spotname, grade, content) VALUES ($1, $2, $3, $4)`
+                break
+            case 'user_routes':
+                var query = `INSERT INTO user_routes (username, routename, spotname, content) VALUES ($1, $2, $3, $4)`
                 break
             default:
                 console.log('No correct Database found');
@@ -88,7 +119,7 @@ const runWorkflow = async (tableName) => {
 };
 
 async function doWork() {
-    const tableNames = ["users", "users_info"];
+    const tableNames = ["users", "spots", "routes", "user_routes"];
     try {
         for (element of tableNames) {
             await dropDBTable(element);
